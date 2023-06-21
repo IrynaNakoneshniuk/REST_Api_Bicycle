@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <h1>Products</h1>
+    <a class="page-link" href="/home">На головну</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Price</th>
+                <th>Buttons</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+
+        async function GetAllBicycles() {
+
+            const response = await fetch("/api/bicycles/",
+                {
+                    method: "GET",
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                });
+
+            if (response.ok === true) {
+
+                const bicycles = await response.json();
+                const body = document.querySelector("tbody");
+                bicycles.forEach(bicycles => body.append(CreateRow(bicycles)));
+            }
+        }
+
+        function CreateRow(bicycles) {
+
+            const tr = document.createElement("tr");
+            tr.setAttribute("data-rowid", bicycles.id);
+            const brandtd = document.createElement("td");
+            brandtd.append(bicycles.brand);
+            tr.append(brandtd);
+            const modeltd = document.createElement("td");
+            modeltd.append(bicycles.model);
+            tr.append(modeltd);
+            const yeartd = document.createElement("td");
+            yeartd.append(bicycles.price);
+            tr.append(yeartd);
+
+            const td = document.createElement("td");
+
+            const btnedit = document.createElement("button");
+            btnedit.append("Edit");
+
+            
+            const btndelete = document.createElement("button");
+            btndelete.append("Delete");
+
+            td.append(btnedit);
+            td.append(btndelete);
+
+            tr.appendChild(td);
+
+            return tr;
+        }
+
+        GetAllBicycles();
+
+    </script>
+</body>
+</html>
